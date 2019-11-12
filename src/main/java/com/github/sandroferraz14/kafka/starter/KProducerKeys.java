@@ -10,9 +10,9 @@ import java.util.concurrent.ExecutionException;
 
 public class KProducerKeys {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        final Logger logger = LoggerFactory.getLogger(KProducerKeys.class);
+        Logger logger = LoggerFactory.getLogger(KProducerKeys.class);
 
-        String bootstrapServer = "ec2-3-134-95-187.us-east-2.compute.amazonaws.com:9092";
+        String bootstrapServer = "<hostname>:9092";
 
         //craete Producer properties
         Properties properties = new Properties();
