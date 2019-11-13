@@ -4,3 +4,7 @@ kafka.consumer.elasticsearch/target/
 target/
 .idea
 .env
+kafka-starter.iml
+kafka.basics/kafka.basics.iml
+kafka.consumer.elasticsearch/kafka.consumer.elasticsearch.iml
+kafka.producer.twitter/kafka.producer.twitter.iml
