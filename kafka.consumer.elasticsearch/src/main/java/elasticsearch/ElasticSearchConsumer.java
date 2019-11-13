@@ -1,5 +1,6 @@
 package elasticsearch;
 
+import com.google.gson.JsonParser;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -22,6 +23,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.events.Event;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -72,27 +74,42 @@ public class ElasticSearchConsumer {
         return consumer;
     }
 
+    private static JsonParser jsonParser = new JsonParser();
+
+    private static String extractIdFromTweet(String tweetJson){
+        return jsonParser.parse(tweetJson).getAsJsonObject().get("id_str").getAsString();
+    }
+
     public static void main(String[] args) throws IOException {
         Logger logger = LoggerFactory.getLogger(ElasticSearchConsumer.class.getName());
         RestHighLevelClient client = createClient();
 
         KafkaConsumer<String, String> consumer = createConsumer("twitter_tweets");
 
+        //Delivery semantic -> At least once for default. This way, can be generate duplicated data
         while(true){
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100)); //new in Kafka 2.0.0
 
             for (ConsumerRecord<String, String> record : records){
+                //2 strategies to create ids
+
+                //kafka generic id
+                //String id = record.topic() + "_" + record.partition() + "_" + record.offset();
+
+                //twitter feed specific id
+                String id = extractIdFromTweet(record.value());
+
                 //where we insert data into ElasticSearch
                 String jsonString = record.value();
 
                 IndexRequest indexRequest = new IndexRequest(
                         "twitter",
-                        "tweets"
+                        "tweets",
+                        id //this is to make our consumer idempotent, avoid duplicated data
                 ).source(jsonString, XContentType.JSON);
 
                 IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
-                String id = indexResponse.getId();
-                logger.info(id);
+                logger.info(indexResponse.getId());
                 try {
                     Thread.sleep(1000); //introduce a small delay
                 } catch (InterruptedException e) {
