@@ -1,3 +1,5 @@
+kafka.basics/target/
+kafka.producer.twitter/target/
 target/
 .idea
 .env

@@ -1,4 +1,4 @@
-package com.github.sandroferraz14.kafka.starter;
+package kafka.starter;
 
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
