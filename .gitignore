@@ -1,5 +1,6 @@
 kafka.basics/target/
 kafka.producer.twitter/target/
+kafka.consumer.elasticsearch/target/
 target/
 .idea
 .env
