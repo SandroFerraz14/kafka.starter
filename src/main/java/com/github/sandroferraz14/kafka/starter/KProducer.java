@@ -12,7 +12,7 @@ public class KProducer {
     public static void main(String[] args) {
         String bootstrapServer = "<hostname>:9092";
 
-        //craete Producer properties
+        //create Producer properties
         Properties properties = new Properties();
         properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
         properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
