@@ -12,3 +12,7 @@ kafka.producer.twitter/kafka.producer.twitter.iml
 ._.DS_Store
 **/.DS_Store
 **/._.DS_Store
+.iml
+._.iml
+**/.iml
+**/._.iml
